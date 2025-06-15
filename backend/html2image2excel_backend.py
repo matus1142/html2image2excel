@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from bs4 import BeautifulSoup
-import pandas as pd
+# import pandas as pd
 import io
 import os
 import tempfile
@@ -12,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import wraps
 import gc
 import logging
+import pandas as pd
 from werkzeug.serving import WSGIRequestHandler
 
 from services import convert_html_to_excel, extract_html_content
@@ -104,12 +105,12 @@ def process_html_content(html_content, filename):
         # Create a temporary HTML file
         current_directory = os.getcwd()
         extractedhtml_file_path = os.path.join(current_directory, 'temporaryHTML.html')
-        
+        print(extractedhtml_file_path)
         # Write the extracted HTML file 
         extract_html_content(extractedhtml_file_path, html_content)
 
         # Convert HTML to Excel
-        excel_output = "html2image2excel_output.xlsx"
+        excel_output = os.path.join(current_directory,"html2image2excel_output.xlsx")
         convert_html_to_excel(extractedhtml_file_path, excel_output_path=excel_output, class_selector=".image-box")
 
         # Read the Excel file into memory
